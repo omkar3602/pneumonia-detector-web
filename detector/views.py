@@ -5,6 +5,7 @@ from .ml_utils import detect
 import os
 import shutil
 import tensorflow as tf
+import tensorflow_hub as hub
 from pneumonia_detector_web.settings import BASE_DIR, MEDIA_ROOT
 # Create your views here.
 def index(request):
@@ -25,8 +26,10 @@ def analyze(request):
         instance = ImageModel()
         instance.image = image
         instance.save()
-        model = tf.keras.models.load_model(os.path.join(BASE_DIR, 'model/pneumonia_detector.h5'))
-        answer = detect(model, os.path.join(MEDIA_ROOT, str(instance.image)))
+        # model = tf.keras.models.load_model(os.path.join(BASE_DIR, 'model/pneumonia_detector.h5'))
+        # answer = detect(model, os.path.join(MEDIA_ROOT, str(instance.image)))
+        resnet_model = tf.keras.models.load_model('model/resnet_model.h5', custom_objects={'KerasLayer':hub.KerasLayer})
+        answer = detect(resnet_model, os.path.join(MEDIA_ROOT, str(instance.image)))
         is_post_request = True
 
         context = {
