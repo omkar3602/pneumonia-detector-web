@@ -1,0 +1,57 @@
+{% load static %}
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{% static 'style.css' %}"/>
+
+    <script src="https://use.fontawesome.com/3a2eaf6206.js"></script>
+    <title>Pneumonia Detector</title>
+</head>
+<body>
+
+    <a href="{% url 'index' %}" style="text-decoration: none">
+        <h1 class="title">Pneumonia Detector Web App</h1>
+    </a>
+    {% if  not is_post_request%}
+        <form class="card" method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            <div class="input-image">
+            <label class="input-label" for="img">  Upload X-ray Image</label><br>        
+            <i class="fa fa-2x fa-camera" style="padding-top: 10px;"></i>
+            <input class="input-tag" type="file" name="img" id="img" placeholder="X-Ray Image">
+            <br>            
+        </div>
+        <div id="image_name"></div>
+        <!-- <img src={{path}} alt="image"> -->
+        <button type="submit" class="analysis-btn">Analyze</button>
+        </form>
+    {% else %}
+        {% if instance.image %}
+        <img src="{{ instance.image.url }}" style="width:20rem"></img> 
+        {% endif %} 
+    {% endif %}
+    {% if is_post_request %}
+        {% if answer == 0 %}
+            <h1 class="title">Normal</h1>
+        {% else %}
+            <h1 class="title">Pneumonia</h1>
+        {% endif %}
+    {% endif %}
+    
+</body>
+<script>
+    image_input = document.getElementById("img")
+    image_name = document.getElementById("image_name");
+
+    image_input.onchange = ()=>{
+        console.log(image_input.value);
+        image_name.innerHTML = image_input.value.split('\\')[image_input.value.split('\\').length-1];
+    }
+
+</script>
+</html>
