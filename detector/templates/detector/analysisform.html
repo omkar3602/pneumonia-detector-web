@@ -11,6 +11,23 @@
 
     <script src="https://use.fontawesome.com/3a2eaf6206.js"></script>
     <title>Pneumonia Detector</title>
+    <style>
+        .loader {
+            border: 16px solid #f3f3f3; /* Light grey */
+            border-top: 16px solid rgb(23, 75, 86); /* Blue */
+            border-radius: 50%;
+            width: 60px;
+            height: 60px;
+            animation: spin 2s linear infinite;
+            margin: 2rem auto;
+            display:none;
+          }
+          
+          @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+          }
+    </style>
 </head>
 <body>
 
@@ -23,12 +40,13 @@
             <div class="input-image">
             <label class="input-label" for="img">  Upload X-ray Image</label><br>        
             <i class="fa fa-2x fa-camera" style="padding-top: 10px;"></i>
-            <input class="input-tag" type="file" name="img" id="img" placeholder="X-Ray Image">
+            <input class="input-tag" type="file" name="img" id="img" placeholder="X-Ray Image" required>
             <br>            
         </div>
         <div id="image_name"></div>
         <!-- <img src={{path}} alt="image"> -->
-        <button type="submit" class="analysis-btn">Analyze</button>
+        <button type="submit" class="analysis-btn" id="submit-btn">Analyze</button>
+        <div class="loader" class="analysis-btn" id="loader"></div>
         </form>
     {% else %}
         {% if instance.image %}
@@ -47,11 +65,22 @@
 <script>
     image_input = document.getElementById("img")
     image_name = document.getElementById("image_name");
-
+    submitBtn = document.getElementById("submit-btn");
+    loader = document.getElementById("loader");
     image_input.onchange = ()=>{
         console.log(image_input.value);
         image_name.innerHTML = image_input.value.split('\\')[image_input.value.split('\\').length-1];
     }
 
+    submitBtn.onclick = ()=>{
+        loader.setAttribute("style", "display:block");
+        submitBtn.setAttribute("style", "display:none");
+           
+    }
+
+
+
 </script>
+
+
 </html>
